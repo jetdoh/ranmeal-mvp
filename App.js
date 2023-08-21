@@ -8,6 +8,7 @@ import MainScreen from './screens/MainScreen';
 import CalenderScreen from './screens/CalenderScreen';
 import HomeScreen from './screens/HomeScreen';
 import LibraryScreen from './screens/LibraryScreen';
+import SettingScreen from './screens/SettingScreen';
 
 //import navigation
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
@@ -17,6 +18,7 @@ const Tab = createBottomTabNavigator();
 
 //import icons
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 function MyTabs() {
   return (
@@ -32,7 +34,7 @@ function MyTabs() {
         },
       }}
     >
-      <Tab.Screen
+      {/* <Tab.Screen
         name="HomeScreen"
         component={HomeScreen}
         options={{
@@ -41,7 +43,7 @@ function MyTabs() {
             <MaterialCommunityIcons name="home" color={color} size={size} />
           ),
         }}
-      />
+      /> */}
       <Tab.Screen
         name="MainScreen"
         component={MainScreen}
@@ -49,6 +51,16 @@ function MyTabs() {
           tabBarLabel: 'RanMeal',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="registered-trademark" color={color} size={size} />
+          ),
+        }}
+        />
+      <Tab.Screen 
+        name="LibraryScreen" 
+        component={LibraryScreen} 
+        options={{
+          tabBarLabel: 'Library',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="format-list-bulleted" color={color} size={size} />
           ),
         }}
         />
@@ -62,13 +74,13 @@ function MyTabs() {
           ),
         }}
         />
-      <Tab.Screen 
-        name="LibraryScreen" 
-        component={LibraryScreen} 
+      <Tab.Screen
+        name="SettingScreen"
+        component={SettingScreen}
         options={{
-          tabBarLabel: 'Library',
+          tabBarLabel: 'Setting',
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="format-list-bulleted" color={color} size={size} />
+            <Ionicons name="settings-outline" color={color} size={size} />
           ),
         }}
         />
