@@ -13,7 +13,7 @@ export default function IconContainer({ caption, imageSource }) {
     const styles = StyleSheet.create({
         container: {
           marginLeft: 20,
-          marginTop: '10%',
+          marginTop: '15%',
           position: 'absolute',
           alignSelf: 'flex-start',
           alignItems: 'center',

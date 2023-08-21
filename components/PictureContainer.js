@@ -14,7 +14,7 @@ const PictureContainer = ({ caption, imageSource }) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 30,
+    marginTop: '15%',
     alignItems: 'center',
     marginBottom: 20,
     position: 'absolute',

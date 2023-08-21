@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, View, Image } from 'react-native';
 //import navigation
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -17,7 +17,6 @@ const Tab = createBottomTabNavigator();
 
 //import icons
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import IconContainer from './components/IconContainer';
 
 function MyTabs() {
   return (
@@ -43,11 +42,36 @@ function MyTabs() {
           ),
         }}
       />
-      <Tab.Screen name="MainScreen" component={MainScreen} />
+      <Tab.Screen
+        name="MainScreen"
+        component={MainScreen}
+        options={{
+          tabBarLabel: 'RanMeal',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="registered-trademark" color={color} size={size} />
+          ),
+        }}
+        />
       <Tab.Screen
         name="CalenderScreen"
-        component={CalenderScreen} />
-      <Tab.Screen name="LibraryScreen" component={LibraryScreen} />
+        component={CalenderScreen} 
+        options={{
+          tabBarLabel: 'Calender',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="calendar" color={color} size={size} />
+          ),
+        }}
+        />
+      <Tab.Screen 
+        name="LibraryScreen" 
+        component={LibraryScreen} 
+        options={{
+          tabBarLabel: 'Library',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="format-list-bulleted" color={color} size={size} />
+          ),
+        }}
+        />
     </Tab.Navigator>
   );
 }
