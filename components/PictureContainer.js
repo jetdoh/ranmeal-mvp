@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Image, StyleSheet, Dimensions} from 'react-native';
 
 //set image size
-const imageSize = Dimensions.get('window').width / 1.4;
+const imageSize = Dimensions.get('window').height * 0.37;
 
 const PictureContainer = ({ caption, imageSource }) => {
   return (
@@ -14,10 +14,10 @@ const PictureContainer = ({ caption, imageSource }) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: '15%',
+    marginTop: '10%',
     alignItems: 'center',
     marginBottom: 20,
-    position: 'absolute',
+    // position: 'absolute',
   },
   image: {
     width: imageSize,

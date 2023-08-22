@@ -22,12 +22,20 @@ export default function MainScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <Swiper
+        marginTop={25}
         backgroundColor='#fff'
         cardHorizontalMargin={0}
         cardVerticalMargin={0}
         cards={data} //Todo: replace with data from database
         cardIndex={index}
-        renderCard={(card) => <Card caption={card.caption} imageSource={card.imageSource} color={card.color} content={card.name} />}
+        renderCard={(card) => 
+          <Card 
+            caption={card.caption}
+            imageSource={card.imageSource} 
+            color={card.color} 
+            content={card.name} 
+            nutrition={card.nutrition}
+            />}
         onSwiped={onSwiped}
         onSwipedAll={() => { alert('you ran out of cards!') }}
         stackSize={3}
@@ -53,27 +61,3 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
 });
-
-//delete this later
-
-// // example data
-// const cards = [
-//   {
-//     caption: 'lasagna',
-//     imageSource: require('../assets/pics/lasagna.jpg'),
-//     color: '#FFCCDE',
-//     content: 'Choice 1',
-//   },
-//   {
-//     caption: 'pizza',
-//     imageSource: require('../assets/pics/pizza.jpg'),
-//     color: '#BDE8E8',
-//     content: 'Choice 2',
-//   },
-//   {
-//     caption: 'sushi',
-//     imageSource: require('../assets/pics/sushi.jpg'),
-//     color: '#F0D1A5',
-//     content: 'Choice 3',
-//   },
-// ];
