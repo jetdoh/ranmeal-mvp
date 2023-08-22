@@ -28,7 +28,6 @@ export default function Card({caption, imageSource, color, content, nutrition}) 
           height: containerHeight,
           alignItems: 'center',
           justifyContent: 'flex-start',
-          backgroundColor: 'gray', //delete this line later
         },
         overlay: {
           ...StyleSheet.absoluteFillObject, // This fills the entire parent container
