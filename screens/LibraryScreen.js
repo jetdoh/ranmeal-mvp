@@ -1,15 +1,42 @@
-//Create an empty screen
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useFonts } from 'expo-font';
 import { View, Text, StyleSheet, SafeAreaView, TextInput, FlatList } from 'react-native';
 import IconContainer from '../components/IconContainer';
 import { Search } from 'react-native-feather';
 import SearchFilter from '../components/SearchFilter';
-import data from '../data';
+// import data from '../data';
+
+//database
+import { doc, getDoc, collection, onSnapshot } from 'firebase/firestore';
+import { database } from '../firebaseConfig';
+
 
 const LibraryScreen = () => {
   //input for search bar
   const [input, setInput] = useState('');
+
+  //get data from database
+  const [meals, setMeals] = useState([]); //array of meals to be rendered
+ //useEffect to update the list
+ useEffect(() => {
+  const mealRef = collection(database, "mealsLibrary");
+
+  const subscriber = onSnapshot(mealRef, {
+    next: (querySnapshot) => {
+      const meals = [] ;
+      querySnapshot.docs.forEach((doc) => {
+        console.log("UPDATED");
+        meals.push({
+          id: doc.id,
+          ...doc.data(),
+        })
+      });
+      setMeals(meals);
+    }
+  });
+
+  return () => subscriber();
+}, []);
 
   //load fonts
   const [fontsLoaded] = useFonts({
@@ -37,7 +64,7 @@ const LibraryScreen = () => {
 
       </View>
       <View style={styles.itemsContainer}>
-        <SearchFilter data={data} input={input} />
+        <SearchFilter data={meals} input={input} />
       </View>
 
       <IconContainer caption='logo' imageSource={require('../assets/icons/logo.png')} />
@@ -45,6 +72,8 @@ const LibraryScreen = () => {
   );
 }
 
+
+//styling
 const styles = StyleSheet.create({
   container: {
     flex: 1,

@@ -1,4 +1,5 @@
 // example data for SearchFilter
+//TODO: use API to get data and add to database then randomly pick 3 meals
 const data = [
     {
         name: 'lasagna',
