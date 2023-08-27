@@ -7,7 +7,7 @@ const imageSize = Dimensions.get('window').height * 0.37;
 const PictureContainer = ({ caption, imageSource }) => {
   return (
     <View style={styles.container}>
-      <Image alt = {caption} source= {imageSource} style={styles.image} />
+      <Image alt = {caption} source= {{ uri: imageSource }} style={styles.image} />
     </View>
   );
 };

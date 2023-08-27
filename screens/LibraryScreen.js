@@ -4,7 +4,6 @@ import { View, Text, StyleSheet, SafeAreaView, TextInput, FlatList } from 'react
 import IconContainer from '../components/IconContainer';
 import { Search } from 'react-native-feather';
 import SearchFilter from '../components/SearchFilter';
-// import data from '../data';
 
 //database
 import { doc, getDoc, collection, onSnapshot } from 'firebase/firestore';
@@ -17,7 +16,8 @@ const LibraryScreen = () => {
 
   //get data from database
   const [meals, setMeals] = useState([]); //array of meals to be rendered
- //useEffect to update the list
+ 
+  //useEffect to update the list
  useEffect(() => {
   const mealRef = collection(database, "mealsLibrary");
 

@@ -7,14 +7,16 @@ import ContentContainer from '../components/ContentContainer';
 
 const containerHeight = Dimensions.get('window').height * 0.88;
 
-export default function Card({caption, imageSource, color, content, nutrition}) {
+export default function Card({caption, imageSource, color, content, nutrition, calories}) {
       //todo: add nutrition data to the database
       return (
      <View style={[styles.container]}>
           <ContentContainer 
           content = {content} 
           color = {color} 
-          nutrition={nutrition}/>
+          nutrition={nutrition}
+          calories={calories}
+          />
           <View style={styles.overlay}>
             <PictureContainer caption= {caption} imageSource= {imageSource}/> 
           </View>

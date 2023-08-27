@@ -4,7 +4,7 @@ import { useFonts } from 'expo-font';
 
 const marginHeader = Dimensions.get('window').height * 0.20;
 
-export default function ContentContainer({color, content, nutrition}) {
+export default function ContentContainer({color, content, nutrition, calories}) {
   const [fontsLoaded] = useFonts({
     'TitanOne-Regular': require('../assets/fonts/TitanOne-Regular.ttf'), // Match the font family name
   });
@@ -17,9 +17,10 @@ export default function ContentContainer({color, content, nutrition}) {
 // calculate width of each bar chart
   const { protein, carbs, fat } = nutrition;
   const sum = protein + carbs + fat;
-  const proteinWidth = (protein / sum) * 70;
-  const carbsWidth = (carbs / sum) * 70;
-  const fatWidth = (fat / sum) * 70;
+  const factor = 70;
+  const proteinWidth = (protein / sum) * factor;
+  const carbsWidth = (carbs / sum) * factor;
+  const fatWidth = (fat / sum) * factor;
 
   return (
     <View style={styles.container}>
@@ -37,7 +38,7 @@ export default function ContentContainer({color, content, nutrition}) {
           <Text style={styles.textNutrition}>Carbs : </Text>
           <View style = {[styles.carbsBarChart, {width: `${carbsWidth}%`}]}></View>
         </View>
-        
+        <Text style = {styles.textCalories}> {calories} cal </Text>
       </View>
     </View>
   );
@@ -71,7 +72,7 @@ const styles = StyleSheet.create({
     marginTop: marginHeader,
     marginBottom: 10,
     width: '80%',
-    fontSize: 35,
+    fontSize: 20,
     fontFamily: 'TitanOne-Regular',
     textAlign: 'center',
     color: '#E17992',
@@ -85,9 +86,16 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     color: '#E17992',
   },
+  textCalories:{
+    marginTop: 10,
+    marginBottom: 10,
+    fontSize: 30,
+    fontFamily: 'TitanOne-Regular',
+    textAlign: 'center',
+    color: 'gray',
+  },
 
-  
-//to do: make bar chart dynamicallly change width base on amount of nutrition
+  //bar chart styling
   proteinBarChart: {
     backgroundColor: 'red',
     marginRight: '5%',

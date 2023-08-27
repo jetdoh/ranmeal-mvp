@@ -6,7 +6,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 //import screens
 import MainScreen from './screens/MainScreen';
 import CalenderScreen from './screens/CalenderScreen';
-import HomeScreen from './screens/HomeScreen';
 import LibraryScreen from './screens/LibraryScreen';
 import SettingScreen from './screens/SettingScreen';
 
@@ -23,6 +22,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 function MyTabs() {
   return (
     <Tab.Navigator
+      initialRouteName="MainScreen"
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: '#e91e63',
