@@ -14,8 +14,8 @@ const LibraryScreen = () => {
   //input for search bar
   const [input, setInput] = useState('');
 
-  //get data from database
-  const [meals, setMeals] = useState([]); //array of meals to be rendered
+  //meals in library
+  const [meals, setMeals] = useState([]); 
  
   //useEffect to update the list
  useEffect(() => {

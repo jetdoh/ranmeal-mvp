@@ -19,9 +19,28 @@ import Swiper from 'react-native-deck-swiper';
 export default function MainScreen() {
 
   //query for API
-  const maxCalories = 1000; 
-  const number = 10;
-  const [query, setQuery] = useState({ maxCalories: maxCalories, number: number});  
+  const [query, setQuery] = useState({
+    calories: 0,
+    protein: 0,
+    fat: 0,
+    number: 3,
+  });  
+
+  //get variables data from database
+  useEffect(() => {
+    const varRef = collection(database, "variables");
+  
+    const subscriber = onSnapshot(varRef, {
+      next: (querySnapshot) => {
+        const vars = querySnapshot.docs[0].data();
+        console.log("VARS");
+        console.log(vars);
+        setQuery({...vars, number: 3});
+      }
+    });
+    return () => subscriber();
+  }, []);
+
 
   //meals in library
   const mealHolder =  {
@@ -52,26 +71,6 @@ export default function MainScreen() {
     refetch(query);
   },[query]);
 
-  //update meals array when database is updated
-  //useEffect to update the list that will be rendered in the library
-  useEffect(() => {
-    const mealRef = collection(database, "mealsLibrary");
-
-    const subscriber = onSnapshot(mealRef, {
-      next: (querySnapshot) => {
-        const meals = [] ;
-        querySnapshot.docs.forEach((doc) => {
-          console.log("UPDATED");
-          meals.push({
-            ...doc.data(),
-          })
-        });
-        setMeals(meals);
-      }
-    });
-
-    return () => subscriber();
-  }, []);
 
   //add meal to library
   const addMeal = async (index) => {
@@ -109,6 +108,7 @@ export default function MainScreen() {
   return (
     <SafeAreaView style={styles.container}>
       {loading ? <Text>Loading...</Text> : 
+        query.calories === 0 ? <Text>Loading...</Text> :
         error ? <Text>Error...</Text> :
         data === undefined ? <Text>no result</Text> :
         <Swiper
