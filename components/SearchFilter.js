@@ -28,10 +28,10 @@ const SearchFilter = ({ data, input }) => {
                             <ItemLibrary imageSource={item.image} name={item.title}  nutrition={nutrition}/>
                         )
                     }
-                    if (item.name.includes(input.toLowerCase())) {
+                    if (item.title.toLowerCase().includes(input.toLowerCase())) {
                         const nutrition = convertNutritionToNumber(item.protein, item.carbs, item.fat);
                         return (
-                            <ItemLibrary imageSource={item.image} name={item.title}  />
+                            <ItemLibrary imageSource={item.image} name={item.title}  nutrition={nutrition}/>
                         )
                     }
                 }}

@@ -20,7 +20,7 @@ const Tab = createBottomTabNavigator();
 const MyTabs = () => {
   return (
     <Tab.Navigator
-      initialRouteName="MainScreen"
+      initialRouteName="LibraryScreen"
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: '#e91e63',
