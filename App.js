@@ -1,25 +1,23 @@
 import React from 'react';
 import { SafeAreaView, View, Image } from 'react-native';
-//import navigation
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 //import screens
 import MainScreen from './screens/MainScreen';
-import CalenderScreen from './screens/CalenderScreen';
 import LibraryScreen from './screens/LibraryScreen';
 import SettingScreen from './screens/SettingScreen';
-
-//import navigation
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
-
-//create a bottom tab navigator
-const Tab = createBottomTabNavigator();
 
 //import icons
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-function MyTabs() {
+//Stack navigation
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
+//import navigation
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+//create a bottom tab navigator
+const Tab = createBottomTabNavigator();
+const MyTabs = () => {
   return (
     <Tab.Navigator
       initialRouteName="MainScreen"
@@ -34,16 +32,6 @@ function MyTabs() {
         },
       }}
     >
-      {/* <Tab.Screen
-        name="HomeScreen"
-        component={HomeScreen}
-        options={{
-          tabBarLabel: 'Home',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="home" color={color} size={size} />
-          ),
-        }}
-      /> */}
       <Tab.Screen
         name="MainScreen"
         component={MainScreen}
@@ -61,16 +49,6 @@ function MyTabs() {
           tabBarLabel: 'Library',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="format-list-bulleted" color={color} size={size} />
-          ),
-        }}
-        />
-      <Tab.Screen
-        name="CalenderScreen"
-        component={CalenderScreen} 
-        options={{
-          tabBarLabel: 'Calender',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="calendar" color={color} size={size} />
           ),
         }}
         />

@@ -1,20 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, View, Text } from 'react-native';
-import {  } from 'react-native-feather';
-
 //import components
 import Card from '../components/Card';
 import IconContainer from '../components/IconContainer';
 
 //fetch data from Spoonacular API
-import useFetch from '../hooks/useFetch';
+import useRandomFetch from '../hooks/useRandomFetch';
 
 //import neccessary function from firebase
-import { collection, addDoc, setDoc, onSnapshot, doc } from 'firebase/firestore';
+import { collection, setDoc, onSnapshot, doc } from 'firebase/firestore';
 import { database } from '../firebaseConfig';
 
 //import swiper
 import Swiper from 'react-native-deck-swiper';
+
+//Stack navigation
+import {useNavigation} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import CalenderScreen from './CalenderScreen';
 
 export default function MainScreen() {
 
@@ -29,7 +32,6 @@ export default function MainScreen() {
   //get variables data from database
   useEffect(() => {
     const varRef = collection(database, "variables");
-  
     const subscriber = onSnapshot(varRef, {
       next: (querySnapshot) => {
         const vars = querySnapshot.docs[0].data();
@@ -65,7 +67,7 @@ export default function MainScreen() {
   const [meals, setMeals] = useState([]); //array of meals
   
   //fetch data from API
-  const {data, loading, error, refetch} = useFetch(query);
+  const {data, loading, error, refetch} = useRandomFetch(query);
 
   useEffect(() => {
     refetch(query);
@@ -77,9 +79,14 @@ export default function MainScreen() {
     //use setDoc to add data to the database only when not exist
     const mealRef = doc(database, "mealsLibrary", data[index].id.toString());
     await setDoc(mealRef, data[index], {merge: true});
-    console.log("ADDED");
-    //todo : use  stack navigator to navigate to pop-up screen
     setMeal(mealHolder);
+  }
+
+  //onSwipedRight
+  const navigation = useNavigation();
+  const onSwipedRight = (index) => {
+    addMeal(index);
+    navigation.navigate('DetailScreenStack', {id: data[index].id}); //pass id , {meal: data[index]}
   }
 
   //setup for card
@@ -90,7 +97,7 @@ export default function MainScreen() {
 
   const renderCard = (card) => {
     const nutrition = convertNutritionToNumber(card.protein, card.carbs, card.fat);
-
+  
     return (
       <Card 
       id = {card.id}
@@ -104,8 +111,8 @@ export default function MainScreen() {
     )  
   }
 
-
-  return (
+  //random meal screen
+  const RanMeal = () => (
     <SafeAreaView style={styles.container}>
       {loading ? <Text>Loading...</Text> : 
         query.calories === 0 ? <Text>Loading...</Text> :
@@ -128,11 +135,29 @@ export default function MainScreen() {
         disableTopSwipe
         disableBottomSwipe
         onSwipedLeft={() => {}}//TODO: add functionality to dump when swiped left using onSwipedLeft(() => {})
-        onSwipedRight={(index) => addMeal(index)} //it receives index of the swiped card
+        onSwipedRight={(index) => onSwipedRight(index)} //it receives index of the swiped card
       />}
       <IconContainer caption='logo' imageSource={require('../assets/icons/logo.png')} />
     </SafeAreaView>
   );
+
+  //create native-stack navigator
+const Stack = createNativeStackNavigator();
+
+return (
+  <Stack.Navigator 
+    screenOptions={{headerShown: false}}
+  >
+    <Stack.Screen
+      name="MainScreenStack"
+      component={RanMeal}
+    />
+    <Stack.Screen
+      name="DetailScreenStack"
+      component={CalenderScreen}
+    />
+  </Stack.Navigator>
+)
 }
 
 const styles = StyleSheet.create({

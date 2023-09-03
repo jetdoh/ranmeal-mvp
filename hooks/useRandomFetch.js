@@ -1,7 +1,9 @@
 import axios from 'axios';
 import React, {useState, useEffect} from 'react';
 
-const useFetch = (query) => {
+const useRandomFetch = (query) => {
+    const apiKey = '3a167bb1fe8943639f38c85d6c042a73'
+
     const rangeCalories = 200;
     const rangeProtein = 10;
     const rangeFat = 10;
@@ -14,7 +16,7 @@ const useFetch = (query) => {
     const minFat = query.fat - rangeFat;
     const number = query.number;   
 
-    const url = `https://api.spoonacular.com/recipes/findByNutrients?minProtein=${minProtein}&maxProtein=${maxProtein}&random=true&minCalories=${minCalories}&maxCalories=${maxCalories}&minFat=${minFat}&maxFat=${maxFat}&number=${number}&apiKey=46cbcdcfbf4f4023a15365db9560c056`;
+    const url = `https://api.spoonacular.com/recipes/findByNutrients?minProtein=${minProtein}&maxProtein=${maxProtein}&random=true&minCalories=${minCalories}&maxCalories=${maxCalories}&minFat=${minFat}&maxFat=${maxFat}&number=${number}&apiKey=${apiKey}`;
 
     const [data, setData] = useState();
     const [loading, setLoading] = useState(true);
@@ -47,11 +49,11 @@ const useFetch = (query) => {
         const maxFat = query.fat + rangeFat;
         const minFat = query.fat - rangeFat;
         const number = query.number;   
-        const newURL = `https://api.spoonacular.com/recipes/findByNutrients?minProtein=${minProtein}&maxProtein=${maxProtein}&random=true&minCalories=${minCalories}&maxCalories=${maxCalories}&minFat=${minFat}&maxFat=${maxFat}&number=${number}&apiKey=46cbcdcfbf4f4023a15365db9560c056`;
+        const newURL = `https://api.spoonacular.com/recipes/findByNutrients?minProtein=${minProtein}&maxProtein=${maxProtein}&random=true&minCalories=${minCalories}&maxCalories=${maxCalories}&minFat=${minFat}&maxFat=${maxFat}&number=${number}&apiKey=${apiKey}`;
         setLoading(true);
         fetchData(newURL);
     }
 
     return {data, loading, error, refetch};
 }
-export default useFetch
+export default useRandomFetch
