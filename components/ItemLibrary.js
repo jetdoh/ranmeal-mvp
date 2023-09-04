@@ -7,11 +7,11 @@ const ItemLibrary = ({imageSource, name, nutrition}) => {
             <Image source = {{ uri: imageSource }} style = {styles.image}/>
             <View style = {styles.contentContainer}>
                 <Text style = {styles.header}>{name}</Text>
-                <View style = {styles.barChartContainer}>
+                {/* <View style = {styles.barChartContainer}>
                     <View style = {[styles.barChart, {backgroundColor: 'red', flex: nutrition.protein, borderTopLeftRadius: 5, borderBottomLeftRadius: 5,}]}></View>
                     <View style = {[styles.barChart, {backgroundColor: 'yellow', flex: nutrition.fat}]}></View>
                     <View style = {[styles.barChart, {backgroundColor: 'green', flex: nutrition.carbs, borderTopRightRadius: 5, borderBottomRightRadius: 5,}]}></View>
-                </View>
+                </View> */}
             </View>
         </View>
     );
@@ -19,32 +19,44 @@ const ItemLibrary = ({imageSource, name, nutrition}) => {
 
 export default ItemLibrary;
 
+const IMAGE_SIZE = 70;
+
 const styles = StyleSheet.create({
     constainer: {
-        height: 140,
-        width: 340,
-        margin: 10,
+        height: IMAGE_SIZE * 1.3,
+        width: '80%',
+        marginTop: 10,
+        marginBottom: 10,
+        marginLeft: IMAGE_SIZE / 2.5,
         maxWidth: 400,
         borderRadius: 20,
-        borderWidth: 2,
-        borderColor: '#BDE8E8',
         flexDirection: 'row',
         alignSelf: 'center',
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'flex-start',
+        elevation: 5, // Add elevation for shadow effect on Android
+        shadowOffset: {
+            width: 4,
+            height: 4,
+          },
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
     },
     contentContainer: {
         flex: 1,
+        marginLeft: IMAGE_SIZE / 1.7,
+        marginRight: 20,
         alignSelf: 'stretch',
         alignItems: 'center',
         justifyContent: 'center',
     },
     image: {
-        width: 100,
-        height: 100,
-        marginLeft: 20,
-        borderRadius: 50,
+        width: IMAGE_SIZE,
+        height: IMAGE_SIZE,
+        borderRadius: IMAGE_SIZE / 2,
+        position: 'absolute',
+        left: -IMAGE_SIZE / 2.2,
         resizeMode: 'cover',
     },
     header:{
@@ -52,7 +64,6 @@ const styles = StyleSheet.create({
         color: '#E17992',
         fontFamily: 'TitanOne-Regular',
         textAlign: 'center',
-        marginTop: 20,
     },
     description: {
         fontSize: 15,

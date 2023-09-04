@@ -5,9 +5,12 @@ import IconContainer from '../components/IconContainer';
 import { Search } from 'react-native-feather';
 import SearchFilter from '../components/SearchFilter';
 
-//database
-import { doc, getDoc, collection, onSnapshot } from 'firebase/firestore';
+//firebase database
+import { doc, collection, onSnapshot } from 'firebase/firestore';
 import { database } from '../firebaseConfig';
+//firebase auth
+import { auth } from '../firebaseConfig';
+
 
 
 const LibraryScreen = () => {
@@ -19,19 +22,27 @@ const LibraryScreen = () => {
  
   //useEffect to update the list
  useEffect(() => {
-  const mealRef = collection(database, "mealsLibrary");
+  
+  // // delete this line
+  // const mealRef = collection(database, "mealsLibrary");
+  
+  //get docs from mealLibrary collection in user's document
+  const uid = auth.currentUser.uid;
+  const userRef = collection(database, "users");
+  const docRef = doc(userRef, uid)
+  const mealLibraryCollectionRef = collection(docRef, "mealLibrary");
 
-  const subscriber = onSnapshot(mealRef, {
+  const subscriber = onSnapshot(mealLibraryCollectionRef, {
     next: (querySnapshot) => {
       const meals = [] ;
       querySnapshot.docs.forEach((doc) => {
-        console.log("UPDATED");
         meals.push({
           id: doc.id,
           ...doc.data(),
         })
       });
       setMeals(meals);
+      console.log("UPDATED");
     }
   });
 

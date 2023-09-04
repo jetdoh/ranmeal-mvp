@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView, View, Image } from 'react-native';
 
 //import screens
 import MainScreen from './screens/MainScreen';
 import LibraryScreen from './screens/LibraryScreen';
 import SettingScreen from './screens/SettingScreen';
+import Login from './screens/LoginScreen';
 
 //import icons
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -15,12 +16,16 @@ import {NavigationContainer, useNavigation} from '@react-navigation/native';
 //import navigation
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
+//firebase auth
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from './firebaseConfig';
+
 //create a bottom tab navigator
 const Tab = createBottomTabNavigator();
 const MyTabs = () => {
   return (
     <Tab.Navigator
-      initialRouteName="LibraryScreen"
+      initialRouteName="MainScreen"
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: '#e91e63',
@@ -69,9 +74,19 @@ const MyTabs = () => {
 
 export default function App() {
 
+  const [user, setUser] = useState();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    })
+
+    return unsubscribe;
+  }, [])
+
   return (
     <NavigationContainer>
-      <MyTabs />
+      {!user ? <Login/> : <MyTabs />}
     </NavigationContainer>
   );
 }
