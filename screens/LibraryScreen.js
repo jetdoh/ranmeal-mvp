@@ -58,25 +58,23 @@ const LibraryScreen = () => {
     return null;
   }
 
-  console.log(input);
+  // console.log(input);
 
   //icon size
   const iconSize = 37;
 
   return (
     <SafeAreaView style={styles.container}>
-
       <View style={styles.headerContainer}>
         <Text style={styles.header}>Library</Text>
         <View style={styles.searchBar}>
           <TextInput value={input} onChangeText={(text) => { setInput(text) }} style={styles.textInput} placeholder='search' />
           <Search stroke='#E17992' width={iconSize} height={iconSize} />
         </View>
-
       </View>
-      <View style={styles.itemsContainer}>
+      { meals === undefined ? <Text>Loading...</Text> : (<View style={styles.itemsContainer}>
         <SearchFilter data={meals} input={input} />
-      </View>
+      </View>)}
 
       <IconContainer caption='logo' imageSource={require('../assets/icons/logo.png')} />
     </SafeAreaView>
@@ -140,5 +138,14 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 35,
     borderTopRightRadius: 35,
   },
+  backDrop: { 
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    width: '100%',
+    backgroundColor: 'backgroundColor: "rgba(0,0,0,0.5)"',
+    justifyContent: 'center',
+    alignItems: 'center', 
+     }
 });
 export default LibraryScreen;

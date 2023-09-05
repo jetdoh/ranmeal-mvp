@@ -126,7 +126,7 @@ export default function MainScreen() {
     await setDoc(mealLibraryDoc, {
       calories: data[index].calories,
       carbs: data[index].carbs,
-      fat: data[index].fat,
+      fat: data[index].fat, 
       id: data[index].id,
       image: data[index].image,
       imageType: data[index].imageType,
