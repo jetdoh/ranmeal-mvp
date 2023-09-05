@@ -17,6 +17,18 @@ const SearchFilter = ({ data, input }) => {
         style={{ alignSelf: "stretch" }}
         data={data}
         renderItem={({ item }) => {
+        
+          //filter out duplicate ingredients
+          const filteredIngredients = [];
+          const seenId = {};
+
+          item.extendedIngredients?.forEach((ingredient) => {
+            if (!seenId[ingredient.id]) {
+              filteredIngredients.push(ingredient);
+              seenId[ingredient.id] = true;
+            }
+          });
+
           if (input === "") {
             const nutrition = convertNutritionToNumber(
               item.protein,
@@ -28,7 +40,7 @@ const SearchFilter = ({ data, input }) => {
                 imageSource={item.image}
                 name={item.title}
                 nutrition={nutrition}
-                ingredients={item.extendedIngredients}
+                ingredients={filteredIngredients}
               />
             );
           }
@@ -43,7 +55,7 @@ const SearchFilter = ({ data, input }) => {
                 imageSource={item.image}
                 name={item.title}
                 nutrition={nutrition}
-                ingredients={item.extendedIngredients}
+                ingredients={filteredIngredients}
               />
             );
           }

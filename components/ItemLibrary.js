@@ -10,6 +10,8 @@ import {
   ScrollView,
 } from "react-native";
 
+import SmallItemInLists from "./SmallItemInLists";
+
 const ItemLibrary = ({ imageSource, name, nutrition, ingredients }) => {
   const [modalVisible, setModalVisible] = React.useState(false);
   return (
@@ -21,11 +23,6 @@ const ItemLibrary = ({ imageSource, name, nutrition, ingredients }) => {
         <Image source={{ uri: imageSource }} style={styles.image} />
         <View style={styles.contentContainer}>
           <Text style={styles.header}>{name}</Text>
-          {/* <View style = {styles.barChartContainer}>
-                    <View style = {[styles.barChart, {backgroundColor: 'red', flex: nutrition.protein, borderTopLeftRadius: 5, borderBottomLeftRadius: 5,}]}></View>
-                    <View style = {[styles.barChart, {backgroundColor: 'yellow', flex: nutrition.fat}]}></View>
-                    <View style = {[styles.barChart, {backgroundColor: 'green', flex: nutrition.carbs, borderTopRightRadius: 5, borderBottomRightRadius: 5,}]}></View>
-                </View> */}
         </View>
       </TouchableOpacity>
       <Modal
@@ -37,16 +34,16 @@ const ItemLibrary = ({ imageSource, name, nutrition, ingredients }) => {
           setModalVisible(!modalVisible);
         }}
       >
-        {console.log("modal is open")}
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.modalTextHeader}>ingredients</Text>
             <ScrollView style={styles.ingredientsContainer} showsVerticalScrollIndicator = {false}>
               {ingredients !== undefined &&
                 ingredients.map((ingredient) => (
-                  <Text key={ingredient.id} style={styles.modalTextIngredients}>
-                    × {ingredient.amount}  :  {ingredient.name}
-                  </Text>
+                //   <Text key={ingredient.id} style={styles.modalTextIngredients}>
+                //     × {ingredient.amount}  :  {ingredient.name}
+                //   </Text>
+                <SmallItemInLists key={ingredient.id} data={ingredient} />
                 ))}
             </ScrollView>
             <TouchableOpacity
@@ -116,23 +113,6 @@ const styles = StyleSheet.create({
     fontFamily: "TitanOne-Regular",
     textAlign: "center",
   },
-  //   barChartContainer: {
-  //     height: 30,
-  //     width: "70%",
-  //     maxWidth: 300,
-  //     backgroundColor: "#F8EFEF",
-  //     borderRadius: 5,
-  //     marginTop: 10,
-  //     marginBottom: 10,
-  //     flexDirection: "row",
-  //     justifyContent: "flex-start",
-  //     alignItems: "center",
-  //   },
-  //   barChart: {
-  //     flex: 1,
-  //     height: "100%",
-  //     backgroundColor: "#E17992",
-  //   },
   centeredView: {
     flex: 1,
     justifyContent: "center",
@@ -142,7 +122,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: "white",
+    backgroundColor: "#FFE7EF",
     borderRadius: 20,
     paddingVertical: 20,
     paddingHorizontal: 10,

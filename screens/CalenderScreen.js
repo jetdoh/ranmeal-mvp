@@ -58,6 +58,16 @@ const CalenderScreen = () => {
 
   // console.log(loading, typeof(data))
   const ingredients = data?.extendedIngredients;
+  // filter out ingredients that have the same id
+  const filteredIngredients = []
+  const seenId = {}
+
+  ingredients?.forEach((ingredient) => {
+    if(!seenId[ingredient.id]){
+      filteredIngredients.push(ingredient)
+      seenId[ingredient.id] = true
+    }
+  })
 
   //add recipe detail to database
   const addDetailToDatabase = async () => {
@@ -125,7 +135,7 @@ const CalenderScreen = () => {
               ) : error ? (
                 <Text>{error}</Text>
               ) : (
-                <BottomSheet ingredients={ingredients} />
+                <BottomSheet ingredients={filteredIngredients} />
               )}
             </Animated.View>
           </>

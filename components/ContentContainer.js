@@ -67,6 +67,13 @@ const styles = StyleSheet.create({
     borderRadius: 35,
     alignItems: 'center',
     justifyContent: 'flex-start',
+    elevation: 5, // Add elevation for shadow effect on Android
+    shadowOffset: {
+        width: 4,
+        height: 4,
+      },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
   },
   textHeader: {
     marginTop: marginHeader,

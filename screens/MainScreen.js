@@ -128,6 +128,8 @@ export default function MainScreen() {
       carbs: data[index].carbs,
       fat: data[index].fat, 
       id: data[index].id,
+      //todo: change default image
+      //default https://spoonacular.com/recipeImages/157093-556x370.jpg
       image: data[index].image,
       imageType: data[index].imageType,
       protein: data[index].protein,
