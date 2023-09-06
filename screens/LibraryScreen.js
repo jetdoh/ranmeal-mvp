@@ -91,10 +91,10 @@ const LibraryScreen = () => {
         </View>
       )}
 
-      <IconContainer
+      {/* <IconContainer
         caption="logo"
         imageSource={require("../assets/icons/logo.png")}
-      />
+      /> */}
     </SafeAreaView>
   );
 };

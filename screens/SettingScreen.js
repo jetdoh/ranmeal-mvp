@@ -121,6 +121,7 @@ const SettingScreen = () => {
       <Text>Protein: {nutrition.protein}</Text>
       <Text>Fat: {nutrition.fat}</Text>
       <Text>Calories: {nutrition.calories}</Text>
+      <Button title = 'sign out' onPress={() => auth.signOut()}/>
     </SafeAreaView>
   );
 };

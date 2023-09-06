@@ -6,7 +6,6 @@ import {
   Image,
   TouchableOpacity,
   Modal,
-  Pressable,
   ScrollView,
 } from "react-native";
 
@@ -40,9 +39,6 @@ const ItemLibrary = ({ imageSource, name, nutrition, ingredients }) => {
             <ScrollView style={styles.ingredientsContainer} showsVerticalScrollIndicator = {false}>
               {ingredients !== undefined &&
                 ingredients.map((ingredient) => (
-                //   <Text key={ingredient.id} style={styles.modalTextIngredients}>
-                //     × {ingredient.amount}  :  {ingredient.name}
-                //   </Text>
                 <SmallItemInLists key={ingredient.id} data={ingredient} />
                 ))}
             </ScrollView>

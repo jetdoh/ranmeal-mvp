@@ -6,6 +6,7 @@ import MainScreen from './screens/MainScreen';
 import LibraryScreen from './screens/LibraryScreen';
 import SettingScreen from './screens/SettingScreen';
 import Login from './screens/LoginScreen';
+import NewSettingScreen from './screens/NewSettingScreen';
 
 //import icons
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -57,11 +58,22 @@ const MyTabs = () => {
           ),
         }}
         />
-      <Tab.Screen
+      {/* todo: delete this old setting screen */}
+      {/* <Tab.Screen
         name="SettingScreen"
         component={SettingScreen}
         options={{
           tabBarLabel: 'Setting',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="settings-outline" color={color} size={size} />
+          ),
+        }}
+        /> */}
+      <Tab.Screen
+        name="NewSettingScreen"
+        component={NewSettingScreen}
+        options={{
+          tabBarLabel: 'NewSetting',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="settings-outline" color={color} size={size} />
           ),

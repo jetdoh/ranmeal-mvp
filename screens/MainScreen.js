@@ -205,10 +205,10 @@ export default function MainScreen() {
           onSwipedRight={(index) => onSwipedRight(index)} //it receives index of the swiped card
         />
       )}
-      <IconContainer
+      {/* <IconContainer
         caption="logo"
         imageSource={require("../assets/icons/logo.png")}
-      />
+      /> */}
     </SafeAreaView>
   );
 
