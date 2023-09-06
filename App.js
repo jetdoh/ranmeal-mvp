@@ -98,6 +98,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
+      {/* edit this later */}
       {!user ? <Login/> : <MyTabs />}
     </NavigationContainer>
   );
