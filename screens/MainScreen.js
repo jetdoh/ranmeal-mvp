@@ -8,7 +8,13 @@ import IconContainer from "../components/IconContainer";
 import useRandomFetch from "../hooks/useRandomFetch";
 
 //import neccessary function from firebase
-import { collection, setDoc, onSnapshot, doc, getDoc } from "firebase/firestore";
+import {
+  collection,
+  setDoc,
+  onSnapshot,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 import { database } from "../firebaseConfig";
 
 //import swiper
@@ -33,53 +39,24 @@ export default function MainScreen() {
     number: 3,
   });
 
-  // //get variables data from database
-  // useEffect(() => {
-  //   const varRef = collection(database, "variables");
-    
-  //   const subscriber = onSnapshot(varRef, {
-  //     next: (querySnapshot) => {
-  //       const vars = querySnapshot.docs[0].data();
-  //       setQuery({ ...vars, number: 3 });
-  //     },
-  //   });
-  //   return () => subscriber();
-  // }, []);
-
-    //get variables data from database (users => uid => variables)
-    useEffect(() => {
-      const uid = auth.currentUser.uid;
-      const userRef = collection(database, "users");
-      const varRef = doc(userRef, uid);
-      const getVar = async () => {
-        await getDoc(varRef).then((doc) => {
-          if (doc.exists()) {
-            const vars = doc.data().var;
-            setQuery({...vars, number: 3});
-          } else {
-            console.log("No such document!");
-          }
-        });
-      };
-      getVar();
-    }, []);
-  
-  //delete this
-  // useEffect(() => {
-  //   const uid = auth.currentUser.uid;
-  //   const userRef = collection(database, "users");
-  //   const varRef = doc(userRef, uid);
-    
-  //   getDoc(varRef).then((doc) => {
-  //     if (doc.exists()) {
-  //       // const vars = doc.data();
-  //       // setQuery({ ...vars, number: 3 });
-  //       console.log(doc.data());
-  //     } else {
-  //       console.log("No such document!");
-  //     }
-  //   });
-  // }, []);
+  //get variables data from database (users => uid => variables)
+  useEffect(() => {
+    const uid = auth.currentUser.uid;
+    const userRef = collection(database, "users");
+    const varRef = doc(userRef, uid);
+    const getVar = async () => {
+      await getDoc(varRef).then((doc) => {
+        if (doc.exists()) {
+          const vars = doc.data().var;
+          // vars.calories !== 0 && console.log("vars : ", vars);
+          vars.calories !== 0 && setQuery({ ...vars, number: 3 });
+        } else {
+          console.log("No such document!");
+        }
+      });
+    };
+    getVar();
+  }, []);
 
   //meals in library
   const mealHolder = {
@@ -104,37 +81,43 @@ export default function MainScreen() {
 
   //fetch data from API
   const { data, loading, error, refetch } = useRandomFetch(query);
- 
+
   useEffect(() => {
-    refetch(query);
+    if (query.calories !== 0 && query.number) { //refetch when the query is changed already
+      // console.log("query changed, refetch!");
+      // console.log("query : ", query);
+      refetch(query);
+    }
   }, [query]);
 
   //add meal to library
   const addMeal = async (index) => {
-    // delete this 
-    // //use setDoc to add data to the database only when not exist
-    // const mealRef = doc(database, "mealsLibrary", data[index].id.toString());
-    // await setDoc(mealRef, data[index], { merge: true });
-
     //add a subcollection of mealLibrary in user document
     //collection(users) => doc(uid) => collection(mealLibrary) => doc(mealId)
     const uid = auth.currentUser.uid;
     const userRef = collection(database, "users");
-    const docRef = doc(userRef, uid)
+    const docRef = doc(userRef, uid);
     const mealLibraryCollection = collection(docRef, "mealLibrary");
-    const mealLibraryDoc = doc(mealLibraryCollection, data[index].id.toString());
-    await setDoc(mealLibraryDoc, {
-      calories: data[index].calories,
-      carbs: data[index].carbs,
-      fat: data[index].fat, 
-      id: data[index].id,
-      //todo: change default image
-      //default https://spoonacular.com/recipeImages/157093-556x370.jpg
-      image: data[index].image,
-      imageType: data[index].imageType,
-      protein: data[index].protein,
-      title: data[index].title,
-    }, {merge: true});
+    const mealLibraryDoc = doc(
+      mealLibraryCollection,
+      data[index].id.toString()
+    );
+    await setDoc(
+      mealLibraryDoc,
+      {
+        calories: data[index].calories,
+        carbs: data[index].carbs,
+        fat: data[index].fat,
+        id: data[index].id,
+        //todo: change default image
+        //current default https://spoonacular.com/recipeImages/157093-556x370.jpg
+        image: data[index].image,
+        imageType: data[index].imageType,
+        protein: data[index].protein,
+        title: data[index].title,
+      },
+      { merge: true }
+    );
     setMeal(mealHolder);
   };
 
@@ -170,7 +153,7 @@ export default function MainScreen() {
       />
     );
   };
-  
+
   //random meal screen
   const RanMeal = () => (
     <SafeAreaView style={styles.container}>
@@ -191,7 +174,7 @@ export default function MainScreen() {
           cards={data}
           cardIndex={index}
           renderCard={(card) => card && renderCard(card)}
-          onSwiped={onSwiped} 
+          onSwiped={onSwiped}
           onSwipedAll={() => {
             alert("you ran out of cards!");
           }}

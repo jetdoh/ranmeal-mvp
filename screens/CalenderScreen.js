@@ -26,9 +26,6 @@ import Animated, {
 //import BottomSheet
 import BottomSheet from "./BottomSheet";
 
-//import custom hook
-import useFetchDetail from "../hooks/useFetchDetail";
-
 //import useRoute
 import { useRoute } from "@react-navigation/native";
 
@@ -36,39 +33,50 @@ import { useRoute } from "@react-navigation/native";
 import { auth, database } from "../firebaseConfig";
 import { collection, setDoc, doc } from "firebase/firestore";
 
+//import axios
+import axios from "axios";
+
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 const imageSize = windowWidth * 0.7;
 
 const CalenderScreen = () => {
-  //state for bottom sheet
-  const [isOpen, setIsOpen] = useState(false);
-  const toggleIsOpen = () => {
-    setIsOpen(!isOpen);
-  };
-
   //make backdrop animatable
   const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
   //fetch recipe detail
   const route = useRoute();
   const recipeId = route.params?.id;
-  const { data, loading, error, refetch } = useFetchDetail(recipeId);
 
-  // console.log(loading, typeof(data))
-  const ingredients = data?.extendedIngredients;
-  // filter out ingredients that have the same id
-  const filteredIngredients = []
-  const seenId = {}
+  //use useEffect
+  const [data, setData] = useState();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState();
+  useEffect(() => {
+    const apiKey = "3a167bb1fe8943639f38c85d6c042a73";
 
-  ingredients?.forEach((ingredient) => {
-    if(!seenId[ingredient.id]){
-      filteredIngredients.push(ingredient)
-      seenId[ingredient.id] = true
-    }
-  })
+    const url = `https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${apiKey}`;
 
+    console.log("detail is fetched!");
+
+    //define async function that fetches data from API
+    const fetchData = async (url) => {
+      try {
+        const response = await axios.get(url);
+        setData(response.data);
+      } catch (error) {
+        alert(error);
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData(url);
+  }, []);
+
+  //add detail to database
   //add recipe detail to database
   const addDetailToDatabase = async () => {
     //collection(users) => doc(uid) => collection(mealLibrary) => doc(mealId)
@@ -77,20 +85,76 @@ const CalenderScreen = () => {
     const docRef = doc(userRef, uid);
     const mealLibraryCollection = collection(docRef, "mealLibrary");
     const mealDocRef = doc(mealLibraryCollection, recipeId.toString());
-    await setDoc(mealDocRef, data, {merge: true});
+    await setDoc(mealDocRef, data, { merge: true });
+    console.log("detail is added to database!");
+  };
+  useEffect(() => {
+    if (data) {
+      addDetailToDatabase();
+    }
+  }, [data]);
+
+  //get ingredients
+  const getIngredients = () => {
+    // console.log(loading, typeof(data))
+    const ingredients = data?.extendedIngredients;
+    // filter out ingredients that have the same id
+    const filteredIngredients = [];
+    const seenId = {};
+
+    ingredients?.forEach((ingredient) => {
+      if (!seenId[ingredient.id]) {
+        filteredIngredients.push(ingredient);
+        seenId[ingredient.id] = true;
+      }
+    });
+    return filteredIngredients;
   };
 
-  !loading && addDetailToDatabase();
+  const filteredIngredients = data && getIngredients();
+  // get the instructions
+  const instructions = data?.instructions;
+  // console.log(instructions);
 
 
-  //Load font
-  const [fontsLoaded] = useFonts({
-    "TitanOne-Regular": require("../assets/fonts/TitanOne-Regular.ttf"), // Match the font family name
-  });
-  if (!fontsLoaded) {
-    // Return a placeholder or loading indicator if fonts are not yet loaded
-    return null;
-  }
+
+  //state for ingredients bottom sheet
+  const [ingredientsIsOpen, setIngredientsIsOpen] = useState(false);
+  const toggleIngredientsIsOpen = () => {
+    setIngredientsIsOpen(!ingredientsIsOpen);
+  };
+  const AnimatedIngredients = () => (
+    <>
+      <AnimatedPressable
+        style={styles.backDrop}
+        onPress={toggleIngredientsIsOpen}
+        entering={FadeIn}
+        exiting={FadeOut}
+      />
+      <Animated.View
+        style={styles.sheet}
+        entering={SlideInDown.springify().damping(15)}
+        exiting={SlideOutDown}
+      >
+        {loading ? (
+          <Text>Loading...</Text>
+        ) : error ? (
+          <Text>{error}</Text>
+        ) : (
+          <BottomSheet ingredients={filteredIngredients} />
+        )}
+      </Animated.View>
+    </>
+  );
+
+    //Load font
+    const [fontsLoaded] = useFonts({
+      "TitanOne-Regular": require("../assets/fonts/TitanOne-Regular.ttf"), // Match the font family name
+    });
+    if (!fontsLoaded) {
+      // Return a placeholder or loading indicator if fonts are not yet loaded
+      return null;
+    }
 
   return (
     <GestureHandlerRootView style={styles.container}>
@@ -104,42 +168,25 @@ const CalenderScreen = () => {
           <Text>Loading...</Text>
         ) : error ? (
           <Text>{error}</Text>
-        ) : data.image === undefined ? <Text> loading pictures </Text> : (
+        ) : data.image === undefined ? (
+          <Text> loading pictures </Text>
+        ) : (
           <>
             <Image style={styles.image} source={{ uri: data.image }} />
             <Text style={styles.text}>{data.title}</Text>
           </>
         )}
-        <TouchableOpacity style={styles.buttonRight} onPress={toggleIsOpen}>
+        <TouchableOpacity
+          style={styles.buttonRight}
+          onPress={toggleIngredientsIsOpen}
+        >
           <Text style={styles.buttonText}>prepare</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonLeft}>
+        <TouchableOpacity style={styles.buttonLeft} onPress={() => {}}>
           <Text style={styles.buttonText}>buy</Text>
         </TouchableOpacity>
 
-        {isOpen && (
-          <>
-            <AnimatedPressable
-              style={styles.backDrop}
-              onPress={toggleIsOpen}
-              entering={FadeIn}
-              exiting={FadeOut}
-            />
-            <Animated.View
-              style={styles.sheet}
-              entering={SlideInDown.springify().damping(15)}
-              exiting={SlideOutDown}
-            >
-              {loading ? (
-                <Text>Loading...</Text>
-              ) : error ? (
-                <Text>{error}</Text>
-              ) : (
-                <BottomSheet ingredients={filteredIngredients} />
-              )}
-            </Animated.View>
-          </>
-        )}
+        {ingredientsIsOpen && <AnimatedIngredients />}
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

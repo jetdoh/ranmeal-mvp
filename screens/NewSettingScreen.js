@@ -16,6 +16,9 @@ import Feather from "react-native-vector-icons/Feather";
 import { auth, database } from "../firebaseConfig";
 import { collection, doc, getDoc, setDoc } from "firebase/firestore";
 
+//import KeyboardDissmissal component
+import KeyboardDissmissal from "../components/KeyboardDissmissal";
+
 const NewSettingScreen = () => {
   const [protein, setProtein] = useState(0);
   const [fat, setFat] = useState(0);
@@ -44,10 +47,10 @@ const NewSettingScreen = () => {
       });
     };
     getVar().then(() => {
-        setProtein(nutrition.protein);
-        setFat(nutrition.fat);
-        setCalories(nutrition.calories);
-    })
+      setProtein(nutrition.protein);
+      setFat(nutrition.fat);
+      setCalories(nutrition.calories);
+    });
   }, []);
 
   useEffect(() => {
@@ -57,7 +60,10 @@ const NewSettingScreen = () => {
       const varRef = doc(userRef, uid);
       await setDoc(varRef, { var: nutrition }, { merge: true });
     };
-    nutrition.calories !== 0 && updateVar();
+    nutrition.calories !== 0 &&
+      nutrition.calories !== 0 &&
+      nutrition.protein &&
+      updateVar();
     console.log(nutrition);
   }, [nutrition]);
 
@@ -71,10 +77,10 @@ const NewSettingScreen = () => {
   const [fatEditVisible, setFatEditVisible] = useState(false);
 
   return (
-    <>
+    <KeyboardDissmissal>
       <SafeAreaView style={styles.container}>
         <View style={styles.headerContainer}>
-          <Text style={styles.header}>Settings</Text>
+          <Text style={styles.header}>Settings 😋</Text>
         </View>
 
         <View style={styles.contentContainer}>
@@ -91,6 +97,7 @@ const NewSettingScreen = () => {
               <View style={styles.editContainer}>
                 <View style={styles.inputBar}>
                   <TextInput
+                    keyboardType= "numeric"
                     style={styles.textInput}
                     placeholder="enter new amount"
                     onChangeText={(text) => setCalories(Number(text))}
@@ -122,6 +129,7 @@ const NewSettingScreen = () => {
               <View style={styles.editContainer}>
                 <View style={styles.inputBar}>
                   <TextInput
+                    keyboardType="numeric"
                     style={styles.textInput}
                     placeholder="enter new amount"
                     onChangeText={(text) => setProtein(Number(text))}
@@ -153,6 +161,7 @@ const NewSettingScreen = () => {
               <View style={styles.editContainer}>
                 <View style={styles.inputBar}>
                   <TextInput
+                    keyboardType="numeric"  
                     style={styles.textInput}
                     placeholder="enter new amount"
                     onChangeText={(text) => setFat(Number(text))}
@@ -171,12 +180,17 @@ const NewSettingScreen = () => {
             )}
             <Text style={styles.text}>fat per meal</Text>
           </View>
-          <View style = {{margin: 10}}>
-            <Button title="sign out" onPress={() => {auth.signOut()}} />
+          <View style={{ margin: 10 }}>
+            <Button
+              title="sign out"
+              onPress={() => {
+                auth.signOut();
+              }}
+            />
           </View>
         </View>
       </SafeAreaView>
-    </>
+    </KeyboardDissmissal>
   );
 };
 
@@ -252,12 +266,14 @@ const styles = StyleSheet.create({
   },
   textInput: {
     color: "#5B5B5B",
-    fontSize: 20,
+    width: "100%",
+    height: "100%",
+    fontSize: 15,
     fontFamily: "TitanOne-Regular",
     textAlign: "left",
   },
   inputBar: {
-    height: "100%",
+    height: "90%",
     flex: 1,
     maxWidth: 350,
     backgroundColor: "white",

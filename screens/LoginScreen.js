@@ -6,7 +6,8 @@ import {
   Button,
   StyleSheet,
   TouchableOpacity,
-  Dimensions,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import React, { useState } from "react";
 import { useFonts } from "expo-font";
@@ -17,8 +18,6 @@ import {
   collection,
   setDoc,
   doc,
-  getDoc,
-  onSnapshot,
 } from "firebase/firestore";
 //firebase auth
 import {
@@ -27,9 +26,11 @@ import {
 } from "firebase/auth";
 
 //use Stack navigation
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
+//import KeyboardDissmissal component
+import KeyboardDissmissal from "../components/KeyboardDissmissal";
 
 const LoginScreen = () => {
 
@@ -64,7 +65,9 @@ const LoginScreen = () => {
       }
     };
 
+
     return (
+      <KeyboardDissmissal>
       <SafeAreaView style={styles.container}>
         <View style={styles.headerContainer}>
           <Text style={styles.header}>Welcome!</Text>
@@ -105,6 +108,7 @@ const LoginScreen = () => {
           </View>
         </View>
       </SafeAreaView>
+      </KeyboardDissmissal>
     );
   };
 
@@ -146,7 +150,14 @@ const LoginScreen = () => {
       }
     };
 
+    const DissmissKeyboard = ({ children }) => (
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()} accessible = {false}>
+        {children}
+      </TouchableWithoutFeedback>
+    )
+
     return (
+      <KeyboardDissmissal>
       <SafeAreaView style={styles.container}>
         <View style={styles.headerContainer}>
           <Text style={styles.header}>Hello!</Text>
@@ -193,6 +204,7 @@ const LoginScreen = () => {
           </View>
         </View>
       </SafeAreaView>
+      </KeyboardDissmissal>
     );
   };
 

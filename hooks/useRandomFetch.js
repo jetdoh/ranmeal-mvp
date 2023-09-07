@@ -22,8 +22,10 @@ const useRandomFetch = (query) => {
     const [loading, setLoading] = useState(true);
     const  [error, setError] = useState();
 
+    
     //define async function that fetches data from API
     const fetchData = async (url) => {
+        console.log("random recipes are fetched!")
         try {
             const response = await axios.get(url);
             setData(response.data);

@@ -1,3 +1,5 @@
+//we don't use this custom hook anymore
+
 import axios from 'axios';
 import React, {useState, useEffect} from 'react';
 
@@ -9,6 +11,8 @@ const useFetchDetail = (id) => {
     const [data, setData] = useState();
     const [loading, setLoading] = useState(true);
     const  [error, setError] = useState();
+
+    console.log("detail is fetched!")
 
     //define async function that fetches data from API
     const fetchData = async (url) => {

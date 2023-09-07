@@ -6,7 +6,8 @@ import {
   StyleSheet,
   SafeAreaView,
   TextInput,
-  FlatList,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import IconContainer from "../components/IconContainer";
 import { Search } from "react-native-feather";
@@ -17,6 +18,8 @@ import { doc, collection, onSnapshot } from "firebase/firestore";
 import { database } from "../firebaseConfig";
 //firebase auth
 import { auth } from "../firebaseConfig";
+
+import KeyboardDissmissal from "../components/KeyboardDissmissal";
 
 const LibraryScreen = () => {
   //input for search bar
@@ -68,6 +71,7 @@ const LibraryScreen = () => {
   const iconSize = 37;
 
   return (
+    <KeyboardDissmissal>
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
         <Text style={styles.header}>Library</Text>
@@ -96,6 +100,7 @@ const LibraryScreen = () => {
         imageSource={require("../assets/icons/logo.png")}
       /> */}
     </SafeAreaView>
+    </KeyboardDissmissal>
   );
 };
 
