@@ -25,6 +25,7 @@ import Animated, {
 
 //import BottomSheet
 import BottomSheet from "./BottomSheet";
+import InstructionsBottomSheet from "./InstructionBottomSheet";
 
 //import useRoute
 import { useRoute } from "@react-navigation/native";
@@ -112,13 +113,29 @@ const CalenderScreen = () => {
   };
 
   const filteredIngredients = data && getIngredients();
+
   // get the instructions
   const instructions = data?.instructions;
+  console.log("Raw Instruction: ", instructions);
+
+  //todo: clean up the instruction
+  const cleanInstructions = (instructions) => {
+    if (instructions.includes("<li>")) {
+      let sliced = instructions.slice(4, -5);
+      let replaced = sliced.replaceAll(/<li>/g, " ");
+      let splited = replaced.split(/<\/li>/g);
+      let filtered = splited.filter((item) => item !== "");
+      return filtered;
+    } else {
+          return instructions.split(". "); 
+    }
+    
+  };
+  const cleanedUpInstructions = instructions && cleanInstructions(instructions);
+  // console.log(cleanedUpInstructions);
   // console.log(instructions);
 
-
-
-  //state for ingredients bottom sheet
+  //ingredients bottom sheet
   const [ingredientsIsOpen, setIngredientsIsOpen] = useState(false);
   const toggleIngredientsIsOpen = () => {
     setIngredientsIsOpen(!ingredientsIsOpen);
@@ -147,14 +164,44 @@ const CalenderScreen = () => {
     </>
   );
 
-    //Load font
-    const [fontsLoaded] = useFonts({
-      "TitanOne-Regular": require("../assets/fonts/TitanOne-Regular.ttf"), // Match the font family name
-    });
-    if (!fontsLoaded) {
-      // Return a placeholder or loading indicator if fonts are not yet loaded
-      return null;
-    }
+  //instructions bottom sheet
+  const [instructionsIsOpen, setInstructionsIsOpen] = useState(false);
+  const toggleInstructionsIsOpen = () => {
+    setInstructionsIsOpen(!instructionsIsOpen);
+  };
+
+  const AnimatedInstructions = () => (
+    <>
+      <AnimatedPressable
+        style={styles.backDrop}
+        onPress={toggleInstructionsIsOpen}
+        entering={FadeIn}
+        exiting={FadeOut}
+      />
+      <Animated.View
+        style={styles.sheet}
+        entering={SlideInDown.springify().damping(15)}
+        exiting={SlideOutDown}
+      >
+        {loading ? (
+          <Text>Loading...</Text>
+        ) : error ? (
+          <Text>{error}</Text>
+        ) : (
+          <InstructionsBottomSheet instructions={cleanedUpInstructions} />
+        )}
+      </Animated.View>
+    </>
+  );
+
+  //Load font
+  const [fontsLoaded] = useFonts({
+    "TitanOne-Regular": require("../assets/fonts/TitanOne-Regular.ttf"), // Match the font family name
+  });
+  if (!fontsLoaded) {
+    // Return a placeholder or loading indicator if fonts are not yet loaded
+    return null;
+  }
 
   return (
     <GestureHandlerRootView style={styles.container}>
@@ -182,11 +229,15 @@ const CalenderScreen = () => {
         >
           <Text style={styles.buttonText}>prepare</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonLeft} onPress={() => {}}>
-          <Text style={styles.buttonText}>buy</Text>
+        <TouchableOpacity
+          style={styles.buttonLeft}
+          onPress={toggleInstructionsIsOpen}
+        >
+          <Text style={styles.buttonText}>cook it</Text>
         </TouchableOpacity>
 
         {ingredientsIsOpen && <AnimatedIngredients />}
+        {instructionsIsOpen && <AnimatedInstructions />}
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

@@ -20,6 +20,7 @@ const BottomSheet = ({ ingredients }) => {
       <Text style = {styles.text}>Ingredients</Text>
       <FlatList
         style = {styles.flatList}
+        showsVerticalScrollIndicator = {false}
         data = {ingredients}
         renderItem = {({item}) => {
           return (

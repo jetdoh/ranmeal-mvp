@@ -32,11 +32,12 @@ import CalenderScreen from "./CalenderScreen";
 
 export default function MainScreen() {
   //query for API
+  const number = 10;
   const [query, setQuery] = useState({
     calories: 0,
     protein: 0,
     fat: 0,
-    number: 3,
+    number: number,
   });
 
   //get variables data from database (users => uid => variables)
@@ -49,7 +50,7 @@ export default function MainScreen() {
         if (doc.exists()) {
           const vars = doc.data().var;
           // vars.calories !== 0 && console.log("vars : ", vars);
-          vars.calories !== 0 && setQuery({ ...vars, number: 3 });
+          vars.calories !== 0 && setQuery({ ...vars, number: number });
         } else {
           console.log("No such document!");
         }

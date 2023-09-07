@@ -74,7 +74,7 @@ const LibraryScreen = () => {
     <KeyboardDissmissal>
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
-        <Text style={styles.header}>Library</Text>
+        <Text style={styles.header}>Library 😋</Text>
         <View style={styles.searchBar}>
           <TextInput
             value={input}

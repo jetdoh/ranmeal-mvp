@@ -80,7 +80,7 @@ const NewSettingScreen = () => {
     <KeyboardDissmissal>
       <SafeAreaView style={styles.container}>
         <View style={styles.headerContainer}>
-          <Text style={styles.header}>Settings 😋</Text>
+          <Text style={styles.header}>Settings ⚙️</Text>
         </View>
 
         <View style={styles.contentContainer}>
