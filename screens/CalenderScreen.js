@@ -3,7 +3,6 @@ import {
   Text,
   StyleSheet,
   Pressable,
-  Button,
   Image,
   Dimensions,
   TouchableOpacity,
@@ -55,7 +54,7 @@ const CalenderScreen = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
   useEffect(() => {
-    const apiKey = "3a167bb1fe8943639f38c85d6c042a73";
+    const apiKey = "207f6e05209e4a6eba9308ec98be4692";
 
     const url = `https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${apiKey}`;
 

@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, {useState, useEffect} from 'react';
 
 const useRandomFetch = (query) => {
-    const apiKey = '3a167bb1fe8943639f38c85d6c042a73'
+    const apiKey = '207f6e05209e4a6eba9308ec98be4692'
 
     const rangeCalories = 200;
     const rangeProtein = 10;

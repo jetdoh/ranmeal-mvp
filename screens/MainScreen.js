@@ -1,5 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { SafeAreaView, StyleSheet, View, Text } from "react-native";
+import React, { useState, useEffect, useCallback } from "react";
+import {
+  SafeAreaView,
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  RefreshControl,
+  ScrollView,
+  ActivityIndicator,
+} from "react-native";
 //import components
 import Card from "../components/Card";
 import IconContainer from "../components/IconContainer";
@@ -8,13 +17,7 @@ import IconContainer from "../components/IconContainer";
 import useRandomFetch from "../hooks/useRandomFetch";
 
 //import neccessary function from firebase
-import {
-  collection,
-  setDoc,
-  onSnapshot,
-  doc,
-  getDoc,
-} from "firebase/firestore";
+import { collection, setDoc, doc, getDoc } from "firebase/firestore";
 import { database } from "../firebaseConfig";
 
 //import swiper
@@ -29,10 +32,12 @@ import { auth } from "../firebaseConfig";
 
 //import Screen
 import CalenderScreen from "./CalenderScreen";
+import RanOutOfCardScreen from "./RanOutOfCardScreen";
+import LoadingScreen from "./LoadingScreen";
 
 export default function MainScreen() {
   //query for API
-  const number = 10;
+  const number = 3;
   const [query, setQuery] = useState({
     calories: 0,
     protein: 0,
@@ -84,7 +89,8 @@ export default function MainScreen() {
   const { data, loading, error, refetch } = useRandomFetch(query);
 
   useEffect(() => {
-    if (query.calories !== 0 && query.number) { //refetch when the query is changed already
+    if (query.calories !== 0 && query.number) {
+      //refetch when the query is changed already
       // console.log("query changed, refetch!");
       // console.log("query : ", query);
       refetch(query);
@@ -155,46 +161,62 @@ export default function MainScreen() {
     );
   };
 
+  // data?.forEach((meal, index) => console.log(index, meal.title));
+
   //random meal screen
-  const RanMeal = () => (
-    <SafeAreaView style={styles.container}>
-      {loading ? (
-        <Text>Loading...</Text>
-      ) : query.calories === 0 ? (
-        <Text>Loading...</Text>
-      ) : error ? (
-        <Text>Error...</Text>
-      ) : data === undefined ? (
-        <Text>no result</Text>
-      ) : (
-        <Swiper
-          marginTop={25}
-          backgroundColor="#fff"
-          cardHorizontalMargin={0}
-          cardVerticalMargin={0}
-          cards={data}
-          cardIndex={index}
-          renderCard={(card) => card && renderCard(card)}
-          onSwiped={onSwiped}
-          onSwipedAll={() => {
-            alert("you ran out of cards!");
-          }}
-          stackSize={3}
-          stackScale={3}
-          stackSeparation={20}
-          // infinite
-          disableTopSwipe
-          disableBottomSwipe
-          onSwipedLeft={() => {}} //TODO: add functionality to dump when swiped left using onSwipedLeft(() => {})
-          onSwipedRight={(index) => onSwipedRight(index)} //it receives index of the swiped card
-        />
-      )}
-      {/* <IconContainer
+  const RanMeal = () => {
+    const [refreshing, setRefreshing] = useState(false);
+    const onRefresh = useCallback(() => {
+      setRefreshing(true);
+      setIndex(0);
+      refetch(query);
+      setTimeout(() => {
+        setRefreshing(false);
+      }, 2000);
+    }, []);
+
+    return (
+      <SafeAreaView style={styles.container}>
+        <ScrollView contentContainerStyle={styles.contentContainerStyle}>
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          {loading ? <LoadingScreen/> : query.calories === 0 ? (
+            <LoadingScreen/>
+          ) : error ? (
+            <Text>Error...</Text>
+          ) : data === undefined ? (
+            <Text>no result</Text>
+          ) : (
+            <Swiper
+              marginTop={0}
+              backgroundColor="#fff"
+              cardHorizontalMargin={0}
+              cardVerticalMargin={0}
+              cards={data}
+              cardIndex={index}
+              renderCard={(card) => card && renderCard(card)}
+              onSwiped={onSwiped}
+              onSwipedAll={() => {}}
+              stackSize={3}
+              stackScale={3}
+              stackSeparation={20}
+              childrenOnTop={false}
+              // infinite
+              disableTopSwipe
+              disableBottomSwipe
+              onSwipedLeft={() => {}} //TODO: add functionality to dump when swiped left using onSwipedLeft(() => {})
+              onSwipedRight={(index) => onSwipedRight(index)} //it receives index of the swiped card
+            >
+              <RanOutOfCardScreen />
+            </Swiper>
+          )}
+          {/* <IconContainer
         caption="logo"
         imageSource={require("../assets/icons/logo.png")}
       /> */}
-    </SafeAreaView>
-  );
+        </ScrollView>
+      </SafeAreaView>
+    );
+  };
 
   //create native-stack navigator
   const Stack = createNativeStackNavigator();
@@ -206,6 +228,7 @@ export default function MainScreen() {
     >
       <Stack.Screen name="MainScreenStack" component={RanMeal} />
       <Stack.Screen name="DetailScreenStack" component={CalenderScreen} />
+      <Stack.Screen name="RanOutOfCardScreen" component={RanOutOfCardScreen} />
     </Stack.Navigator>
   );
 }
@@ -213,9 +236,17 @@ export default function MainScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignSelf: "stretch",
-    backgroundColor: "#fff",
+  },
+  contentContainerStyle: {
+    flex: 1,
+    backgroundColor: "white",
     alignItems: "center",
     justifyContent: "flex-start",
+  },
+  loadingText: {
+    fontSize: 20,
+    color: "#E17992",
+    fontFamily: "TitanOne-Regular",
+    textAlign: "center",
   },
 });

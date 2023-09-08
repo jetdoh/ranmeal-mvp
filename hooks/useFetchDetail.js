@@ -4,7 +4,7 @@ import axios from 'axios';
 import React, {useState, useEffect} from 'react';
 
 const useFetchDetail = (id) => {
-    const apiKey = '3a167bb1fe8943639f38c85d6c042a73'
+    const apiKey = '207f6e05209e4a6eba9308ec98be4692'
 
     const url = `https://api.spoonacular.com/recipes/${id}/information?apiKey=${apiKey}`;
 
