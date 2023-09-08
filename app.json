@@ -1,30 +1,38 @@
 {
   "expo": {
-    "name": "ranmeal-mvp",
+    "name": "Ranmeal-",
     "slug": "ranmeal-mvp",
+    "description": "Are you tired of cooking the same meals over and over again? Say hello to RanMeal, your ultimate culinary companion! RanMeal is the innovative mobile app that takes meal planning to a whole new level by adding an element of surprise and excitement to your kitchen adventures.",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icons/new_logo.jpeg",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/pics/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#FFE7EF"
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.jetdoh.ranmealmvp"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icons/new_logo.jpeg",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.jetdoh.ranmealmvp"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icons/new_logo.jpeg"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "4dc8cf7a-52ba-4e1c-9840-714561fd034f"
+      }
     }
   }
 }

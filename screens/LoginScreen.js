@@ -85,6 +85,7 @@ const LoginScreen = () => {
           <TextInput
             style={styles.input}
             value={password}
+            secureTextEntry={true}
             placeholder="enter your password"
             onChangeText={(text) => setPassword(text)}
           />
@@ -174,12 +175,14 @@ const LoginScreen = () => {
           <Text style={styles.title}>Password</Text>
           <TextInput
             style={styles.input}
+            secureTextEntry={true}
             value={password}
             placeholder="enter your password"
             onChangeText={(text) => setPassword(text)}
           />
           <TextInput
             style={[styles.input, { marginTop: 0 }]}
+            secureTextEntry={true}
             value={secondPassword}
             placeholder="enter your password again"
             onChangeText={(text) => setSecondPassword(text)}

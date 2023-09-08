@@ -37,7 +37,7 @@ import LoadingScreen from "./LoadingScreen";
 
 export default function MainScreen() {
   //query for API
-  const number = 3;
+  const number = 20;
   const [query, setQuery] = useState({
     calories: 0,
     protein: 0,
